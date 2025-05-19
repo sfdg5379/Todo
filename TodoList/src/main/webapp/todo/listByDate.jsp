@@ -18,8 +18,8 @@
     int day = Integer.parseInt(dayStr);
 
     Calendar cal = Calendar.getInstance();
-    cal.set(year, month - 1, day);  // Calendar는 month가 0부터 시작
-    Date dueDate = new Date(cal.getTimeInMillis());
+    cal.set(year, month - 1, day);  
+    java.sql.Date dueDate = new java.sql.Date(cal.getTimeInMillis());
 
     // DAO로 할 일 가져오기
     TodoDAO dao = new TodoDAO();
@@ -42,3 +42,17 @@
 <% } %>
 
 <a href="../main.jsp">← 메인으로 돌아가기</a>
+
+<hr>
+<h3>➕ 할 일 추가</h3>
+<form action="addByDate" method="post">
+    <input type="hidden" name="year" value="<%= year %>">
+    <input type="hidden" name="month" value="<%= month %>">
+    <input type="hidden" name="day" value="<%= day %>">
+
+    <label>제목: <input type="text" name="title" required></label><br><br>
+    <label>내용: <input type="text" name="content" required></label><br><br>
+
+    <button type="submit">추가</button>
+</form>
+

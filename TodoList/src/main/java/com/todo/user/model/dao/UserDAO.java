@@ -1,8 +1,5 @@
 package com.todo.user.model.dao;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 
 import com.todo.user.model.dto.User;
@@ -21,9 +18,10 @@ public class UserDAO {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                String hashedPassword = rs.getString("PASSWORD");
+                String savedPassword = rs.getString("PASSWORD");
 
-                if (hashedPassword.equals(sha256(rawPassword))) {
+                // ✅ 암호화 없이 평문 비교
+                if (savedPassword.equals(rawPassword)) {
                     User user = new User();
                     user.setUserId(rs.getLong("USER_ID"));
                     user.setUsername(rs.getString("USERNAME"));
@@ -35,20 +33,5 @@ public class UserDAO {
             e.printStackTrace();
         }
         return null;
-    }
-
-    // ✅ 비밀번호 SHA-256 암호화
-    private String sha256(String input) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] result = md.digest(input.getBytes(StandardCharsets.UTF_8));
-            StringBuilder sb = new StringBuilder();
-            for (byte b : result) {
-                sb.append(String.format("%02x", b));
-            }
-            return sb.toString();
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

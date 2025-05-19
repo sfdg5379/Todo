@@ -40,5 +40,21 @@ public class TodoDAO {
 	    }
 	    return list;
 	}
+	
+	
+	
+	public int insert(Todo todo) throws SQLException {
+	    String sql = "INSERT INTO TODOS (USER_ID, TITLE, CONTENT, DUE_DATE, IS_DONE) VALUES (?, ?, ?, ?, ?)";
+	    try (Connection conn = JDBCTemplate.getConnection();
+	         PreparedStatement ps = conn.prepareStatement(sql)) {
+	        ps.setLong(1, todo.getUserId());
+	        ps.setString(2, todo.getTitle());
+	        ps.setString(3, todo.getContent());
+	        ps.setDate(4, todo.getDueDate());
+	        ps.setString(5, String.valueOf(todo.getIsDone()));
+	        return ps.executeUpdate();
+	    }
+	}
+
 
 }

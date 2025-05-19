@@ -10,6 +10,9 @@ import java.io.IOException;
 
 @WebServlet("/login")
 public class LoginController extends HttpServlet {
+	
+	private static final long serialVersionUID = 1L;
+	
     private final UserDAO userDAO = new UserDAO();
 
     @Override
