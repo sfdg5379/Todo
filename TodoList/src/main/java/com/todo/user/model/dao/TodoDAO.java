@@ -16,14 +16,15 @@ import com.todo.user.model.dto.Todo;
 public class TodoDAO {
 
 	public List<Todo> findByDate(long userId, Date dueDate) throws SQLException {
-	    String sql = "SELECT * FROM TODOS WHERE USER_ID = ? AND DUE_DATE = ? ORDER BY TODO_ID DESC";
+	    String sql = "SELECT * FROM TODOS WHERE USER_ID = ? AND TRUNC(DUE_DATE) = TRUNC(TO_DATE(?, 'YYYY-MM-DD'))";
 	    List<Todo> list = new ArrayList<>();
 
 	    try (Connection conn = JDBCTemplate.getConnection();
 	         PreparedStatement ps = conn.prepareStatement(sql)) {
 
 	        ps.setLong(1, userId);
-	        ps.setDate(2, dueDate);
+	        ps.setString(2, dueDate.toString()); // yyyy-MM-dd 형태 문자열
+
 	        try (ResultSet rs = ps.executeQuery()) {
 	            while (rs.next()) {
 	                Todo t = new Todo();
@@ -40,9 +41,8 @@ public class TodoDAO {
 	    }
 	    return list;
 	}
-	
-	
-	
+
+
 	public int insert(Todo todo) throws SQLException {
 	    String sql = "INSERT INTO TODOS (USER_ID, TITLE, CONTENT, DUE_DATE, IS_DONE) VALUES (?, ?, ?, ?, ?)";
 	    try (Connection conn = JDBCTemplate.getConnection();
