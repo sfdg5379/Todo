@@ -67,6 +67,15 @@ public class TodoDAO {
 	    }
 	}
 
+	public int delete(long todoId) throws SQLException {
+	    String sql = "DELETE FROM TODOS WHERE TODO_ID = ?";
+	    try (Connection conn = JDBCTemplate.getConnection();
+	         PreparedStatement ps = conn.prepareStatement(sql)) {
+	        ps.setLong(1, todoId);
+	        return ps.executeUpdate();
+	    }
+	}
+
 
 
 }
