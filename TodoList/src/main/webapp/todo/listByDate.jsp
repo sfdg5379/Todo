@@ -45,7 +45,16 @@
                     </button>
                 </form>
 
-                <!-- 할 일 내용 -->
+                <!-- 🗑 삭제 버튼 -->
+                <form action="/TodoList/todo/delete" method="post" style="display:inline;">
+                    <input type="hidden" name="todoId" value="<%= t.getTodoId() %>">
+                    <input type="hidden" name="year" value="<%= year %>">
+                    <input type="hidden" name="month" value="<%= month %>">
+                    <input type="hidden" name="day" value="<%= day %>">
+                    <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?')">🗑 삭제</button>
+                </form>
+
+                <!-- 내용 출력 -->
                 <b><%= t.getTitle() %></b> - <%= t.getContent() %>
             </li>
         <% } %>
@@ -56,7 +65,7 @@
 
 <hr>
 <h3>➕ 할 일 추가</h3>
-<form action="addByDate" method="post">
+<form action="/TodoList/todo/addByDate" method="post">
     <input type="hidden" name="year" value="<%= year %>">
     <input type="hidden" name="month" value="<%= month %>">
     <input type="hidden" name="day" value="<%= day %>">
