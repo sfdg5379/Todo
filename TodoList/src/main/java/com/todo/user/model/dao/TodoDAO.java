@@ -55,6 +55,18 @@ public class TodoDAO {
 	        return ps.executeUpdate();
 	    }
 	}
+	
+	
+	public int toggleDone(long todoId, char isDone) throws SQLException {
+	    String sql = "UPDATE TODOS SET IS_DONE = ? WHERE TODO_ID = ?";
+	    try (Connection conn = JDBCTemplate.getConnection();
+	         PreparedStatement ps = conn.prepareStatement(sql)) {
+	        ps.setString(1, String.valueOf(isDone));
+	        ps.setLong(2, todoId);
+	        return ps.executeUpdate();
+	    }
+	}
+
 
 
 }

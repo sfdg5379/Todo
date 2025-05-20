@@ -12,16 +12,15 @@
     String monthStr = request.getParameter("month");
     String dayStr = request.getParameter("day");
 
-    // 날짜 문자열 → java.sql.Date로 변환
     int year = Integer.parseInt(yearStr);
     int month = Integer.parseInt(monthStr);
     int day = Integer.parseInt(dayStr);
 
     Calendar cal = Calendar.getInstance();
-    cal.set(year, month - 1, day);  
+    cal.set(year, month - 1, day);  // month는 0부터 시작
     java.sql.Date dueDate = new java.sql.Date(cal.getTimeInMillis());
 
-    // DAO로 할 일 가져오기
+    // DAO로 할 일 목록 가져오기
     TodoDAO dao = new TodoDAO();
     List<Todo> list = dao.findByDate(userId, dueDate);
 %>
@@ -34,8 +33,20 @@
     <ul>
         <% for (Todo t : list) { %>
             <li>
+                <!-- ✅ 완료 토글 버튼 -->
+                <form action="/TodoList/todo/toggle" method="post" style="display:inline;">
+                    <input type="hidden" name="todoId" value="<%= t.getTodoId() %>">
+                    <input type="hidden" name="isDone" value="<%= t.getIsDone() == 'Y' ? 'N' : 'Y' %>">
+                    <input type="hidden" name="year" value="<%= year %>">
+                    <input type="hidden" name="month" value="<%= month %>">
+                    <input type="hidden" name="day" value="<%= day %>">
+                    <button type="submit">
+                        <%= t.getIsDone() == 'Y' ? "✅ 완료됨" : "⬜ 완료하기" %>
+                    </button>
+                </form>
+
+                <!-- 할 일 내용 -->
                 <b><%= t.getTitle() %></b> - <%= t.getContent() %>
-                (<%= t.getIsDone() == 'Y' ? "완료" : "미완료" %>)
             </li>
         <% } %>
     </ul>
@@ -55,4 +66,3 @@
 
     <button type="submit">추가</button>
 </form>
-
